@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<String> getTableNames() {
         ArrayList<String> arrTblNames = new ArrayList<String>();
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' and name not like 'android_metadata'", null);
 
         if (c.moveToFirst()) {
             while ( !c.isAfterLast() ) {
