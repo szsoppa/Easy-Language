@@ -21,4 +21,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textAlignment="gravity" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView_dictionaries"
+        android:layout_below="@+id/textView_dictionaries"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

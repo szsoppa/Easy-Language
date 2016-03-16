@@ -1,12 +1,15 @@
 package com.example.szymon.easylanguage;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,11 +20,17 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        db = new DatabaseHelper(getApplicationContext());
+        initializeMenu();
+    }
+
+    private void initializeMenu() {
         ArrayList<String> tableNames = db.getTableNames();
         TextView textView = (TextView) findViewById(R.id.textView_dictionaries);
         if (tableNames.size() == 1) {
@@ -29,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             textView.setText("My dictionaries");
+            ListView listView = (ListView) findViewById(R.id.listView_dictionaries);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    tableNames);
+            listView.setAdapter(arrayAdapter);
         }
     }
 
@@ -43,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                Toast.makeText(getApplicationContext(), "Item 1 Selected", Toast.LENGTH_LONG).show();
+                Intent newTableActivity = new Intent(this, NewTableActivity.class);
+                startActivity(newTableActivity);
+                initializeMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

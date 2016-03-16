@@ -9,4 +9,41 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.szymon.easylanguage.NewTableActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Please insert dictionary name"
+        android:id="@+id/textView_dictionaryName"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_dicionaryName"
+        android:layout_below="@+id/textView_dictionaryName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:id="@+id/button_create"
+        android:layout_below="@+id/editText_dicionaryName"
+        android:layout_alignLeft="@+id/textView_dictionaryName"
+        android:layout_alignStart="@+id/textView_dictionaryName"
+        android:layout_marginTop="56dp"
+        android:onClick="create" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/button_cancel"
+        android:layout_alignTop="@+id/button_create"
+        android:layout_alignRight="@+id/textView_dictionaryName"
+        android:layout_alignEnd="@+id/textView_dictionaryName"
+        android:onClick="cancel" />
 </RelativeLayout>
