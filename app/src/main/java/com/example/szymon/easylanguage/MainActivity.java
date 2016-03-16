@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,11 +21,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.
-//        actionBar.setDisplayShowHomeEnabled(true);
-//        actionBar.setIcon(R.drawable.ic_add_black_24dp);
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        ArrayList<String> tableNames = db.getTableNames();
+        TextView textView = (TextView) findViewById(R.id.textView_dictionaries);
+        if (tableNames.size() == 1) {
+            textView.setText("You have no dictionaries at this moment.\nPlease create one.");
+        }
+        else {
+            textView.setText("My dictionaries");
+        }
     }
 
     @Override

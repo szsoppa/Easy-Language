@@ -10,7 +10,7 @@
     tools:context="com.example.szymon.easylanguage.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="My dictionaries"
@@ -20,5 +20,5 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textAlignment="center" />
+        android:textAlignment="gravity" />
 </RelativeLayout>
