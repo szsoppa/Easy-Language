@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Easy Language</string>
     <string name="add_dictionary">Add dictionary</string>
+    <string name="show_list">Show list</string>
 </resources>

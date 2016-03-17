@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/action_add"
-        android:title="@string/add_dictionary"
-        app:showAsAction="always"
         android:icon="@drawable/ic_add_white_24dp"
-        android:orderInCategory="100"/>
+        android:orderInCategory="100"
+        android:title="@string/add_dictionary"
+        app:showAsAction="always" />
 </menu>
