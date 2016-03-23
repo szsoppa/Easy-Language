@@ -16,19 +16,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DatabaseInfo.DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void createTable(String TableName) {
+    public void createTable(String TableName, String primaryLanguage, String destinationLanguage) {
         String SQL_CREATE_ENTRIES =  "CREATE TABLE " + TableName + " (" +
-                                        DatabaseInfo.COLUMN_WORD + "TEXT," +
-                                        DatabaseInfo.COLUMN_TRANSLATED_WORD + "TEXT )";
+                                        DatabaseInfo.COLUMN_WORD + " TEXT," +
+                                        DatabaseInfo.COLUMN_TRANSLATED_WORD + " TEXT )";
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TableName);
         db.execSQL(SQL_CREATE_ENTRIES);
 
-        String SQL_CREATE_TABLE_TR =  "CREATE TABLE IF NOT EXISTS " + DatabaseInfo.TRANSLATIONS_TABLE + " (" +
-                DatabaseInfo.COLUMN_TR_FROM + "TEXT," +
-                DatabaseInfo.COLUMN_TR_TO + "TEXT," +
-                DatabaseInfo.COLUMN_TABLE_NAME + "TEXT )";
+        String SQL_CREATE_TABLE_TR =  "CREATE TABLE IF NOT EXISTS " + DatabaseInfo.TRANSLATIONS_TABLE + "( " +
+                DatabaseInfo.COLUMN_TR_FROM + " TEXT," +
+                DatabaseInfo.COLUMN_TR_TO + " TEXT," +
+                DatabaseInfo.COLUMN_TABLE_NAME + " TEXT )";
         db.execSQL(SQL_CREATE_TABLE_TR);
+        System.out.println(SQL_CREATE_TABLE_TR);
+        db.execSQL("INSERT INTO " + DatabaseInfo.TRANSLATIONS_TABLE + " (" +
+                DatabaseInfo.COLUMN_TR_FROM + "," +
+                DatabaseInfo.COLUMN_TR_TO + "," +
+                DatabaseInfo.COLUMN_TABLE_NAME + ")" +
+                " VALUES('" + primaryLanguage + "','" + destinationLanguage + "','" + TableName +
+                "')");
+        System.out.println("INSERT INTO " + DatabaseInfo.TRANSLATIONS_TABLE + " ("+
+                DatabaseInfo.COLUMN_TR_FROM + "," +
+                DatabaseInfo.COLUMN_TR_TO + "," +
+                DatabaseInfo.COLUMN_TABLE_NAME + ")" +
+                " VALUES('" + primaryLanguage + "','" + destinationLanguage + "','" + TableName +
+                "')");
         db.close();
     }
 

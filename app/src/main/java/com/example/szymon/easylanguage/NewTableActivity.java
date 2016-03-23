@@ -41,19 +41,7 @@ public class NewTableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_table);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Spinner primaryLanguage = (Spinner) findViewById(R.id.spinner_primaryLanguage);
-        Spinner destinationLanguage = (Spinner) findViewById(R.id.spinner_destinationLanguage);
-        String response;
         new FeedTask().execute();
-        primaryLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
     }
 
     public void create(View v) {
@@ -62,8 +50,12 @@ public class NewTableActivity extends AppCompatActivity {
         if (dictionaryName.length() == 0) {
             Toast.makeText(this, "Please provide dictionary name.", Toast.LENGTH_LONG).show();
         } else {
+            Spinner primaryLanguageSpinner = (Spinner) findViewById(R.id.spinner_primaryLanguage);
+            Spinner destinationLanguageSpinner = (Spinner) findViewById(R.id.spinner_destinationLanguage);
+            String primaryLanguage = primaryLanguageSpinner.getSelectedItem().toString();
+            String destinationLanguage = destinationLanguageSpinner.getSelectedItem().toString();
             DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-            db.createTable(dictionaryName.replaceAll(" ", "_").toLowerCase());
+            db.createTable(dictionaryName.replaceAll(" ", "_").toLowerCase(), primaryLanguage, destinationLanguage);
             this.finish();
         }
     }
