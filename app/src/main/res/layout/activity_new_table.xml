@@ -25,7 +25,8 @@
         android:id="@+id/editText_dicionaryName"
         android:layout_below="@+id/textView_dictionaryName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:maxLength="20" />
 
     <Button
         android:layout_width="wrap_content"

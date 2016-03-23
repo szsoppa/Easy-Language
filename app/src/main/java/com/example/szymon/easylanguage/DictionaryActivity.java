@@ -17,11 +17,11 @@ public class DictionaryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tableName = getIntent().getStringExtra("dictionaryName");
+        tableName = getIntent().getStringExtra("dictionaryName").replaceAll("_", " ");
         setContentView(R.layout.activity_dictionary);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportActionBar().setTitle(capitalizeString(getIntent().getStringExtra("dictionaryName")));
+        getSupportActionBar().setTitle(capitalizeString(tableName));
         db = new DatabaseHelper(getApplicationContext());
     }
 
