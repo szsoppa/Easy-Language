@@ -1,8 +1,7 @@
 package com.example.szymon.easylanguage;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,13 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.larvalabs.svgandroid.SVG;
-import com.larvalabs.svgandroid.SVGParser;
 
 import java.util.ArrayList;
 
@@ -32,10 +27,16 @@ public class MainActivity extends AppCompatActivity {
         initializeMenu();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeMenu();
+    }
+
     private void initializeMenu() {
-        ArrayList<String> tableNames = db.getTableNames();
+        final ArrayList<String> tableNames = db.getTableNames();
         TextView textView = (TextView) findViewById(R.id.textView_dictionaries);
-        if (tableNames.size() == 1) {
+        if (tableNames.size() == 0) {
             textView.setText("You have no dictionaries at this moment.\nPlease create one.");
         }
         else {
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent dictionaryActivity = new Intent(getApplicationContext(), DictionaryActivity.class);
+                    dictionaryActivity.putExtra("dictionaryName", tableNames.get(position).replaceAll(" ", "_").toLowerCase());
                     startActivity(dictionaryActivity);
                 }
             });
@@ -58,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_menu, menu);//Menu Resource, Menu
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -67,14 +68,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent newTableActivity = new Intent(this, NewTableActivity.class);
-                startActivity(newTableActivity);
-                initializeMenu();
-                return true;
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+                if(cm.getActiveNetworkInfo() != null) {
+                    Intent newTableActivity = new Intent(this, NewTableActivity.class);
+                    startActivity(newTableActivity);
+                    return true;
+                }
+                else {
+                    Toast.makeText(this, "Please connect to internet", Toast.LENGTH_LONG).show();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 }
