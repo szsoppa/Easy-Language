@@ -3,6 +3,7 @@ package com.example.szymon.easylanguage;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -11,12 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -80,10 +79,10 @@ public class DictionaryActivity extends AppCompatActivity {
             textView.setText("Your dictionary is empty at this moment.");
         }
         else {
+            initializeButton();
             textView.setText("My words");
             ListView listView = (ListView) findViewById(R.id.listView_words);
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                    this, R.layout.list_item);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_item);
             for (int i=0; i<words.size(); i++) {
                 String item = i+1 + ". " + words.get(i).first + "\nTranslation: " + words.get(i).second;
                 arrayAdapter.add(item);
@@ -97,6 +96,25 @@ public class DictionaryActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void initializeButton() {
+        Button buttonTest = new Button(this);
+        buttonTest.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        buttonTest.setTextColor(Color.WHITE);
+        buttonTest.setText("Take test");
+        LinearLayout ll = (LinearLayout) findViewById(R.id.linearLayout);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        ll.addView(buttonTest,0,lp);
+        buttonTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent testActivity = new Intent(getApplicationContext(), TestActivity.class);
+                testActivity.putExtra("dictionaryName", tableName);
+                startActivity(testActivity);
+            }
+        });
     }
 
     private void confirmDelete() {
