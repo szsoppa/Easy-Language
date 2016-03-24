@@ -41,6 +41,7 @@ public class NewTableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_table);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("New Dictionary");
         new FeedTask().execute();
     }
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.ArrayList;
 
@@ -36,18 +37,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 DatabaseInfo.COLUMN_TABLE_NAME + ")" +
                 " VALUES('" + primaryLanguage + "','" + destinationLanguage + "','" + TableName +
                 "')");
-        System.out.println("INSERT INTO " + DatabaseInfo.TRANSLATIONS_TABLE + " ("+
-                DatabaseInfo.COLUMN_TR_FROM + "," +
-                DatabaseInfo.COLUMN_TR_TO + "," +
-                DatabaseInfo.COLUMN_TABLE_NAME + ")" +
-                " VALUES('" + primaryLanguage + "','" + destinationLanguage + "','" + TableName +
-                "')");
         db.close();
     }
 
-    public void deleteTable(String TableName) {
+    public void deleteTable(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TableName);
+        db.execSQL("DROP TABLE IF EXISTS " + tableName);
         db.close();
     }
 
@@ -65,6 +60,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrTblNames;
     }
 
+    public void insertWord(String tableName, String primaryWord, String translatedWord) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO " + tableName + " (" +
+                DatabaseInfo.COLUMN_WORD + "," +
+                DatabaseInfo.COLUMN_TRANSLATED_WORD + ")" +
+                " VALUES('" + primaryWord + "','" + translatedWord +
+                "')");
+        db.close();
+    }
+
     public void onCreate(SQLiteDatabase db) {
 //        db.execSQL(SQL_CREATE_ENTRIES);
 //        Log.d("Database operations", "Database created");
@@ -77,5 +82,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public ArrayList<Pair<String,String>> getWordsFromDict(String tableName) {
+        ArrayList<Pair<String,String>> wordPairs = new ArrayList<Pair<String,String>>();
+        ArrayList<String> arrTblNames = new ArrayList<String>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT " + DatabaseInfo.COLUMN_WORD + "," + DatabaseInfo.COLUMN_TRANSLATED_WORD +
+                                " FROM " + tableName, null);
+
+        if (c.moveToFirst()) {
+            while ( !c.isAfterLast() ) {
+                String primaryWord = c.getString(c.getColumnIndex(DatabaseInfo.COLUMN_WORD));
+                String translatedWord = c.getString(c.getColumnIndex(DatabaseInfo.COLUMN_TRANSLATED_WORD));
+                wordPairs.add(new Pair<String, String>(primaryWord, translatedWord));
+                c.moveToNext();
+            }
+        }
+        return wordPairs;
     }
 }
