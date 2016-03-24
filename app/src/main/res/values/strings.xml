@@ -3,4 +3,9 @@
     <string name="add_dictionary">Add dictionary</string>
     <string name="show_list">Show list</string>
     <string name="add_item">Add item</string>
+    <string name="new_dictionary">Create new dictionary</string>
+    <string name="choose_destination_language">Choose destination language</string>
+    <string name="choose_primary_language">Choose primary language</string>
+    <string name="new_dictionary_info">Please insert dictionary name</string>
+    <string name="dictionaries_info">My dictionaries</string>
 </resources>

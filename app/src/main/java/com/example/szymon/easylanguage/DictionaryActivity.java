@@ -24,6 +24,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
     DatabaseHelper db;
     String tableName;
+    String languageDirection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class DictionaryActivity extends AppCompatActivity {
             case R.id.action_addItem:
                 Intent addItemActivity = new Intent(this, AddItemActivity.class);
                 tableName = getIntent().getStringExtra("dictionaryName");
+                languageDirection = getIntent().getStringExtra("languageDirection");
                 addItemActivity.putExtra("dictionaryName", tableName);
+                addItemActivity.putExtra("languageDirection", languageDirection);
                 startActivity(addItemActivity);
                 return true;
             case R.id.action_list:
@@ -92,12 +95,10 @@ public class DictionaryActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private void confirmDelete() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder
                 .setMessage("Are you sure?")
                 .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {

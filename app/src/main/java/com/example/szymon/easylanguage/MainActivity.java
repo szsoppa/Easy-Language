@@ -44,14 +44,18 @@ public class MainActivity extends AppCompatActivity {
             ListView listView = (ListView) findViewById(R.id.listView_dictionaries);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                     this,
-                    android.R.layout.simple_list_item_1,
-                    tableNames);
+                    R.layout.list_item);
+            for (int i=0; i<tableNames.size(); i++) {
+                arrayAdapter.add(i+1 + ". " + capitalizeString(tableNames.get(i)));
+            }
             listView.setAdapter(arrayAdapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent dictionaryActivity = new Intent(getApplicationContext(), DictionaryActivity.class);
-                    dictionaryActivity.putExtra("dictionaryName", tableNames.get(position).replaceAll(" ", "_").toLowerCase());
+                    String tableName = tableNames.get(position);
+                    dictionaryActivity.putExtra("dictionaryName", tableName.replaceAll(" ", "_").toLowerCase());
+                    dictionaryActivity.putExtra("languageDirection", db.getLanguageDirections(tableName));
                     startActivity(dictionaryActivity);
                 }
             });
@@ -80,5 +84,9 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private String capitalizeString(String text) {
+        return text.substring(0,1).toUpperCase()+text.substring(1, text.length());
     }
 }

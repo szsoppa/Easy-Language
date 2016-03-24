@@ -29,14 +29,22 @@ public class AddItemActivity extends AppCompatActivity {
     String primaryWord;
     String translatedWord;
     String tableName;
+    String languageDirection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
         tableName = getIntent().getStringExtra("dictionaryName");
+        languageDirection = getIntent().getStringExtra("languageDirection");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Add new item");
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     public void translate(View v) {
@@ -66,7 +74,7 @@ public class AddItemActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String translationUrl = YANDEX_GET_TR_URL + "&text=" + primaryWord + "&lang=pl-en";
+                String translationUrl = YANDEX_GET_TR_URL + "&text=" + primaryWord + "&lang=" + languageDirection;
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder().url(translationUrl).build();
                 Response response = client.newCall(request).execute();

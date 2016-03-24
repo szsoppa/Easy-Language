@@ -70,6 +70,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public String getLanguageDirections(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT " + DatabaseInfo.COLUMN_TR_FROM + "," +
+                DatabaseInfo.COLUMN_TR_TO + " FROM " + DatabaseInfo.TRANSLATIONS_TABLE + " where " +
+                DatabaseInfo.COLUMN_TABLE_NAME + " like '" + tableName + "'", null);
+        c.moveToFirst();
+        String primaryLanguage = c.getString(c.getColumnIndex(DatabaseInfo.COLUMN_TR_FROM));
+        String destinationLanguage = c.getString(c.getColumnIndex(DatabaseInfo.COLUMN_TR_TO));
+        db.close();
+        return primaryLanguage + "-" + destinationLanguage;
+    }
+
     public void onCreate(SQLiteDatabase db) {
 //        db.execSQL(SQL_CREATE_ENTRIES);
 //        Log.d("Database operations", "Database created");

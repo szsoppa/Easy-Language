@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -56,13 +59,14 @@ public class NewTableActivity extends AppCompatActivity {
             String primaryLanguage = primaryLanguageSpinner.getSelectedItem().toString();
             String destinationLanguage = destinationLanguageSpinner.getSelectedItem().toString();
             DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-            db.createTable(dictionaryName.replaceAll(" ", "_").toLowerCase(), primaryLanguage, destinationLanguage);
+            db.createTable(dictionaryName.replaceAll(" ", "_").toLowerCase(),
+                            getAbbreviation(primaryLanguage), getAbbreviation(destinationLanguage));
             this.finish();
         }
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
@@ -79,15 +83,14 @@ public class NewTableActivity extends AppCompatActivity {
                 jsonObject = new JSONObject(response.body().string()).getJSONObject("langs");
                 return jsonObject.toString();
 
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 return null;
             }
         }
 
         @Override
         protected void onPreExecute() {
-            myPd_ring  = new ProgressDialog(NewTableActivity.this);
+            myPd_ring = new ProgressDialog(NewTableActivity.this);
             myPd_ring.setMessage("Fetching languages");
             myPd_ring.show();
         }
@@ -95,8 +98,8 @@ public class NewTableActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Iterator<?> keys = jsonObject.keys();
 
-            while( keys.hasNext() ) {
-                String key = (String)keys.next();
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
                 try {
                     langs.add(jsonObject.getString(key));
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item);
@@ -111,5 +114,19 @@ public class NewTableActivity extends AppCompatActivity {
             }
             myPd_ring.dismiss();
         }
+    }
+
+    private String getAbbreviation(String language) {
+        Iterator<?> keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            try {
+                String lng =jsonObject.getString(key);
+                if (lng.equals(language)) return key;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 }

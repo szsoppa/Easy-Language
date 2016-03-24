@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,66 +14,53 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Please insert dictionary name"
+        android:text="@string/new_dictionary_info"
         android:id="@+id/textView_dictionaryName"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center" />
+        android:gravity="left" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_dicionaryName"
-        android:layout_below="@+id/textView_dictionaryName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:maxLength="20" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create new dictionary"
-        android:id="@+id/button_create"
-        android:onClick="create"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp" />
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Choose primary language"
+        android:text="@string/choose_primary_language"
         android:id="@+id/textView_primaryLanguage"
-        android:layout_below="@+id/editText_dicionaryName"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Choose destination language"
-        android:id="@+id/textView_destinationLanguage"
-        android:textAlignment="center"
-        android:layout_below="@+id/spinner_primaryLanguage"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:gravity="start" />
 
     <Spinner
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner_primaryLanguage"
-        android:layout_below="@+id/textView_primaryLanguage"
-        android:layout_centerHorizontal="true"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:layout_marginBottom="43dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/choose_destination_language"
+        android:id="@+id/textView_destinationLanguage"
+        android:gravity="start" />
 
     <Spinner
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner_destinationLanguage"
-        android:layout_below="@+id/textView_destinationLanguage"
-        android:layout_centerHorizontal="true"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:layout_marginBottom="83dp" />
 
-</RelativeLayout>
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_dictionary"
+        android:id="@+id/button_create"
+        android:background="@color/colorAccent"
+        android:textColor="#FFF"
+        android:onClick="create" />
+
+</LinearLayout>
