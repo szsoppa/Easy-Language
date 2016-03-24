@@ -41,11 +41,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Translate"
+        android:background="@color/colorAccent"
+        android:textColor="#FFF"
         android:id="@+id/button_translate"
         android:layout_below="@+id/textView_translateInfo"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:onClick="translate" />
+        android:onClick="translate"
+        android:layout_alignRight="@+id/textView_insertWord"
+        android:layout_alignEnd="@+id/textView_insertWord"
+        android:layout_alignLeft="@+id/textView_insertWord"
+        android:layout_alignStart="@+id/textView_insertWord" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -60,9 +65,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Add this word"
+        android:background="@color/colorAccent"
+        android:textColor="#FFF"
         android:id="@+id/button_addWord"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:onClick="addWord" />
+        android:onClick="addWord"
+        android:layout_marginTop="15px"
+        android:layout_below="@+id/editText_translatedWord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

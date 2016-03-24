@@ -89,9 +89,11 @@ public class DictionaryActivity extends AppCompatActivity {
                 arrayAdapter.add(item);
             }
             listView.setAdapter(arrayAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    return false;
                 }
             });
         }
