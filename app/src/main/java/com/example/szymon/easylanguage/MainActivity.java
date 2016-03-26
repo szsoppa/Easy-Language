@@ -65,12 +65,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private void initializeMenu() {
         final ArrayList<String> tableNames = db.getTableNames();
         TextView textView = (TextView) findViewById(R.id.textView_dictionaries);
+        ListView listView = (ListView) findViewById(R.id.listView_dictionaries);
         if (tableNames.size() == 0) {
             textView.setText("You have no dictionaries at this moment.\nPlease create one.");
+            listView.setAdapter(null);
         }
         else {
             textView.setText("My dictionaries");
-            ListView listView = (ListView) findViewById(R.id.listView_dictionaries);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                     this,
                     R.layout.list_item);
