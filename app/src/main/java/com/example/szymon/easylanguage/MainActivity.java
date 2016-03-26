@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if(cm.getActiveNetworkInfo() == null && item.getItemId() != R.id.list_settings) {
+        if(cm.getActiveNetworkInfo() == null && item.getItemId() != R.id.action_list) {
             Toast.makeText(this, "Please connect to internet", Toast.LENGTH_LONG).show();
             return false;
         }

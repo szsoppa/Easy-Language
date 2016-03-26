@@ -55,9 +55,7 @@ public class DictionaryActivity extends AppCompatActivity {
                 return true;
             case R.id.action_list:
                 return true;
-            case R.id.list_settings:
-                return true;
-            case R.id.list_remove:
+            case R.id.action_deleteDictionary:
                 confirmDelete();
                 return true;
             default:
@@ -120,7 +118,7 @@ public class DictionaryActivity extends AppCompatActivity {
     private void confirmDelete() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder
-                .setMessage("Are you sure?")
+                .setMessage(R.string.delete_dictionary_confirmation)
                 .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
