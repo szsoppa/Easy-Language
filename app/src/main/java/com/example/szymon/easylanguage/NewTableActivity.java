@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -102,6 +103,7 @@ public class NewTableActivity extends AppCompatActivity {
                 String key = (String) keys.next();
                 try {
                     langs.add(jsonObject.getString(key));
+                    Collections.sort(langs);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item);
                     adapter.addAll(langs);
                     Spinner primaryLanguage = (Spinner) findViewById(R.id.spinner_primaryLanguage);

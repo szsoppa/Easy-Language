@@ -8,4 +8,21 @@
         android:orderInCategory="100"
         android:title="@string/add_dictionary"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_list"
+        android:icon="@drawable/ic_list_white_24dp"
+        android:orderInCategory="200"
+        android:title="@string/show_list"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/list_backup"
+                android:title="Create backup" />
+            <item
+                android:id="@+id/list_restore"
+                android:title="Restore from drive" />
+
+        </menu>
+    </item>
 </menu>
