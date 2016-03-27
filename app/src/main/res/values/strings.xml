@@ -10,4 +10,5 @@
     <string name="dictionaries_info">My dictionaries</string>
     <string name="delete_dictionary">Delete dictionary</string>
     <string name="delete_dictionary_confirmation">Are you sure you want to delete this dictionary?</string>
+    <string name="upload_success">You have successfully uploaded backup to drive</string>
 </resources>

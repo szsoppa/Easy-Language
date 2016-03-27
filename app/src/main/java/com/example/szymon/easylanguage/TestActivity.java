@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class TestActivity extends AppCompatActivity {
     String tableName;
     DatabaseHelper db;
     ArrayList<Pair<String, String>> words;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,9 @@ public class TestActivity extends AppCompatActivity {
         Collections.shuffle(words);
         tableName = getIntent().getStringExtra("dictionaryName");
         words = db.getWordsFromDict(tableName);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setMax(words.size());
+        progressBar.setProgress(round);
         TextView textView_primaryWord = (TextView) findViewById(R.id.textView_primaryWord);
         textView_primaryWord.setText("Word: " + words.get(round).first);
     }
@@ -73,6 +78,7 @@ public class TestActivity extends AppCompatActivity {
                 checkButton.setText("Next");
             }
             round++;
+            progressBar.setProgress(round);
             if (round == words.size()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder

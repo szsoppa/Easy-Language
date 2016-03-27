@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private static final int REQUEST_CODE_RESOLUTION = 3;
     private static final int REQUEST_CODE_OPENER = 1;
     private static final int RESTORE_BACKUP = 1;
-    private static final int UPLOAD_BACKUP = 1;
+    private static final int UPLOAD_BACKUP = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                         @Override
                                         public void onResult(@NonNull DriveFolder.DriveFileResult fileRslt) {
                                             if (fileRslt.getStatus().isSuccess()) {
-//                                                fileRslt.getDriveFile();
+                                                Toast.makeText(getApplication(),
+                                                        R.string.upload_success,
+                                                        Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     }
@@ -226,8 +228,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     .addOnConnectionFailedListener(this)
                     .build();
         }
-        if (!mGoogleApiClient.isConnected())
-            mGoogleApiClient.connect();
+        if (mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
+        mGoogleApiClient.connect();
     }
 
     @Override
