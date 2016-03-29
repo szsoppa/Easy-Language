@@ -1,10 +1,12 @@
 package com.example.szymon.easylanguage;
 
 import android.app.ProgressDialog;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,15 +25,28 @@ public class AddItemActivity extends AppCompatActivity {
     String translatedWord;
     String tableName;
     String languageDirection;
+    Boolean editable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-        tableName = getIntent().getStringExtra("dictionaryName");
-        languageDirection = getIntent().getStringExtra("languageDirection");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Add new item");
+        tableName = getIntent().getStringExtra("dictionaryName");
+        languageDirection = getIntent().getStringExtra("languageDirection");
+        primaryWord = getIntent().getStringExtra("primaryWord");
+        translatedWord = getIntent().getStringExtra("translatedWord");
+        if (primaryWord != null && translatedWord != null) {
+            EditText editText_primaryWord = (EditText) findViewById(R.id.editText_primaryWord);
+            EditText editText_translatedWord = (EditText) findViewById(R.id.editText_translatedWord);
+            editText_primaryWord.setText(primaryWord);
+            editText_translatedWord.setText(translatedWord);
+            editable = true;
+            getSupportActionBar().setTitle("Edit word");
+            Button button_edit = (Button) findViewById(R.id.button_addWord);
+            button_edit.setText("Confirm");
+        }
     }
 
     @Override
@@ -40,7 +55,12 @@ public class AddItemActivity extends AppCompatActivity {
         return true;
     }
 
-    public void translate(View v) {
+    public boolean translate(View v) {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if(cm.getActiveNetworkInfo() == null) {
+            Toast.makeText(this, "Please connect to internet", Toast.LENGTH_LONG).show();
+            return false;
+        }
         EditText editText = (EditText) findViewById(R.id.editText_primaryWord);
         primaryWord = editText.getText().toString();
         if (primaryWord.length() == 0) {
@@ -49,6 +69,7 @@ public class AddItemActivity extends AppCompatActivity {
         else {
             new FeedTask().execute();
         }
+        return true;
     }
 
     public void addWord(View v) {
@@ -57,7 +78,12 @@ public class AddItemActivity extends AppCompatActivity {
         primaryWord = editText_primaryWord.getText().toString();
         translatedWord = editText_translatedWord.getText().toString();
         DatabaseHelper db = new DatabaseHelper(this);
-        db.insertWord(tableName, primaryWord, translatedWord);
+        if (editable) {
+            String originalPrimaryWord = getIntent().getStringExtra("primaryWord");
+            db.editWord(tableName, originalPrimaryWord, primaryWord, translatedWord);
+        }
+        else
+            db.insertWord(tableName, primaryWord, translatedWord);
         this.finish();
     }
 

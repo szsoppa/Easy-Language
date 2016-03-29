@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,7 +61,7 @@ public class TestActivity extends AppCompatActivity {
         else {
             String translatedWord = editText.getText().toString();
 
-            if (words.get(round).second.equals(translatedWord)) {
+            if (words.get(round).second.toLowerCase().equals(translatedWord.toLowerCase())) {
                 hideKeyboard();
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
                 imageView.setImageResource(R.drawable.ic_done_black_24dp);
@@ -91,6 +92,7 @@ public class TestActivity extends AppCompatActivity {
                             }
                         })
                         .show();
+                finish();
             }
             else {
                 checkButton.setText("Next");

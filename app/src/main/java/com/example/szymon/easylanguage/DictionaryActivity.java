@@ -10,12 +10,15 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,7 @@ public class DictionaryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(capitalizeString(tableName));
         db = new DatabaseHelper(getApplicationContext());
+        initializeButton();
         initializeMenu();
     }
 
@@ -69,17 +73,22 @@ public class DictionaryActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeMenu();
+    }
+
     private void initializeMenu() {
         final ArrayList<Pair<String, String>> words = db.getWordsFromDict(tableName);
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
         TextView textView = (TextView) findViewById(R.id.textView_dictionaryInfo);
+        final ListView listView = (ListView) findViewById(R.id.listView_words);
+        listView.setAdapter(null);
         if (words.size() == 0) {
             textView.setText("Your dictionary is empty at this moment.");
         }
         else {
-            initializeButton();
             textView.setText("My words");
-            ListView listView = (ListView) findViewById(R.id.listView_words);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_item);
             for (int i=0; i<words.size(); i++) {
                 String item = i+1 + ". " + words.get(i).first + "\nTranslation: " + words.get(i).second;
@@ -88,9 +97,31 @@ public class DictionaryActivity extends AppCompatActivity {
             listView.setAdapter(arrayAdapter);
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    return false;
+                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, final long id) {
+                    PopupMenu menu = new PopupMenu (getApplicationContext(), view);
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getTitle().toString().equals(getResources().getString(R.string.remove_word))) {
+                                db.deleteWord(tableName, words.get((int) id).first);
+                                initializeMenu();
+                            }
+                            else if (item.getTitle().toString().equals(getResources().getString(R.string.edit_word))){
+                                Intent addItemActivity = new Intent(getApplicationContext(), AddItemActivity.class);
+                                tableName = getIntent().getStringExtra("dictionaryName");
+                                languageDirection = getIntent().getStringExtra("languageDirection");
+                                addItemActivity.putExtra("dictionaryName", tableName);
+                                addItemActivity.putExtra("languageDirection", languageDirection);
+                                addItemActivity.putExtra("primaryWord", words.get((int) id).first);
+                                addItemActivity.putExtra("translatedWord", words.get((int) id).second);
+                                startActivity(addItemActivity);
+                            }
+                            return false;
+                        }
+                    });
+                    menu.inflate(R.menu.word_menu);
+                    menu.show();
+                    return true;
                 }
             });
         }

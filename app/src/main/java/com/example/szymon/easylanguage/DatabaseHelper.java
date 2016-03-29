@@ -70,6 +70,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteWord(String tableName, String primaryWord) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + tableName + " WHERE " + DatabaseInfo.COLUMN_WORD +
+                " LIKE '" + primaryWord + "'");
+        db.close();
+    }
+
     public String getLanguageDirections(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT " + DatabaseInfo.COLUMN_TR_FROM + "," +
@@ -112,5 +119,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return wordPairs;
+    }
+
+    public void editWord(String tableName, String originalPrimaryWord, String changedPrimaryWord, String translatedWord) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + tableName + " SET " +
+                DatabaseInfo.COLUMN_WORD + "='" + changedPrimaryWord + "'," +
+                DatabaseInfo.COLUMN_TRANSLATED_WORD + "='" + translatedWord + "'" +
+                " WHERE " + DatabaseInfo.COLUMN_WORD + "='" + originalPrimaryWord + "'");
+        db.close();
     }
 }
