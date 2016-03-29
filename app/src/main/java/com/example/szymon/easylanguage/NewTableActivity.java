@@ -1,6 +1,8 @@
 package com.example.szymon.easylanguage;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -38,21 +40,35 @@ public class NewTableActivity extends AppCompatActivity {
         new FeedTask().execute();
     }
 
-    public void create(View v) {
+    public boolean create(View v) {
         EditText textView = (EditText) findViewById(R.id.editText_dicionaryName);
         String dictionaryName = textView.getText().toString();
         if (dictionaryName.length() == 0) {
             Toast.makeText(this, "Please provide dictionary name.", Toast.LENGTH_LONG).show();
         } else {
+            DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+            if (db.isTableExists(dictionaryName.replaceAll(" ", "_").toLowerCase())) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder
+                        .setMessage("Dictionary with provided name already exists")
+                        .setPositiveButton("Ok",  new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                return;
+                            }
+                        })
+                        .show();
+                return false;
+            }
             Spinner primaryLanguageSpinner = (Spinner) findViewById(R.id.spinner_primaryLanguage);
             Spinner destinationLanguageSpinner = (Spinner) findViewById(R.id.spinner_destinationLanguage);
             String primaryLanguage = primaryLanguageSpinner.getSelectedItem().toString();
             String destinationLanguage = destinationLanguageSpinner.getSelectedItem().toString();
-            DatabaseHelper db = new DatabaseHelper(getApplicationContext());
             db.createTable(dictionaryName.replaceAll(" ", "_").toLowerCase(),
                             getAbbreviation(primaryLanguage), getAbbreviation(destinationLanguage));
             this.finish();
         }
+        return true;
     }
 
     @Override

@@ -89,6 +89,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return primaryLanguage + "-" + destinationLanguage;
     }
 
+    public boolean isTableExists(String tableName) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);
+        if(cursor!=null) {
+            if(cursor.getCount()>0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
+    }
+
     public void onCreate(SQLiteDatabase db) {
 //        db.execSQL(SQL_CREATE_ENTRIES);
 //        Log.d("Database operations", "Database created");
