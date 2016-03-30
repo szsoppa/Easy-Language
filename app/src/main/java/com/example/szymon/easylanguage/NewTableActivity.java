@@ -42,7 +42,7 @@ public class NewTableActivity extends AppCompatActivity {
 
     public boolean create(View v) {
         EditText textView = (EditText) findViewById(R.id.editText_dicionaryName);
-        String dictionaryName = textView.getText().toString();
+        String dictionaryName = textView.getText().toString().trim();
         if (dictionaryName.length() == 0) {
             Toast.makeText(this, "Please provide dictionary name.", Toast.LENGTH_LONG).show();
         } else {

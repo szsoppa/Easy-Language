@@ -72,11 +72,15 @@ public class AddItemActivity extends AppCompatActivity {
         return true;
     }
 
-    public void addWord(View v) {
+    public boolean addWord(View v) {
         EditText editText_primaryWord = (EditText) findViewById(R.id.editText_primaryWord);
         EditText editText_translatedWord = (EditText) findViewById(R.id.editText_translatedWord);
-        primaryWord = editText_primaryWord.getText().toString();
-        translatedWord = editText_translatedWord.getText().toString();
+        primaryWord = editText_primaryWord.getText().toString().trim();
+        translatedWord = editText_translatedWord.getText().toString().trim();
+        if (primaryWord.equals("") || translatedWord.equals("")) {
+            Toast.makeText(getApplicationContext(), "Please provide word and translation", Toast.LENGTH_LONG).show();
+            return false;
+        }
         DatabaseHelper db = new DatabaseHelper(this);
         if (editable) {
             String originalPrimaryWord = getIntent().getStringExtra("primaryWord");
@@ -85,6 +89,7 @@ public class AddItemActivity extends AppCompatActivity {
         else
             db.insertWord(tableName, primaryWord, translatedWord);
         this.finish();
+        return true;
     }
 
     public class FeedTask extends AsyncTask<String, Void, String> {

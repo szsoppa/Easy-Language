@@ -61,7 +61,7 @@ public class TestActivity extends AppCompatActivity {
         else {
             String translatedWord = editText.getText().toString();
 
-            if (words.get(round).second.toLowerCase().equals(translatedWord.toLowerCase())) {
+            if (words.get(round).second.toLowerCase().equals(translatedWord.toLowerCase().trim())) {
                 hideKeyboard();
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
                 imageView.setImageResource(R.drawable.ic_done_black_24dp);
@@ -83,8 +83,8 @@ public class TestActivity extends AppCompatActivity {
             if (round == words.size()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder
-                        .setMessage("Your score is: " + positives + " good answers and " +
-                                                        negatives + " bad answers")
+                .setMessage("Your score is: " + positives + " good answers and " +
+                        negatives + " bad answers")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
@@ -92,7 +92,6 @@ public class TestActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-                finish();
             }
             else {
                 checkButton.setText("Next");
