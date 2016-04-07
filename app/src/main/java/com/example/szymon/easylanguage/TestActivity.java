@@ -3,6 +3,7 @@ package com.example.szymon.easylanguage;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,18 +15,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class TestActivity extends AppCompatActivity {
 
     int round = 0;
+    int progress = 0;
     int positives = 0;
     int negatives = 0;
     String tableName;
     DatabaseHelper db;
+    Map badAnswers;
     ArrayList<Pair<String, String>> words;
     ProgressBar progressBar;
 
@@ -35,9 +41,10 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         db = new DatabaseHelper(getApplicationContext());
         words = new ArrayList<Pair<String, String>>();
-        Collections.shuffle(words);
         tableName = getIntent().getStringExtra("dictionaryName");
         words = db.getWordsFromDict(tableName);
+        badAnswers = new HashMap<>();
+        Collections.shuffle(words);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setMax(words.size());
         progressBar.setProgress(round);
@@ -62,13 +69,18 @@ public class TestActivity extends AppCompatActivity {
             String translatedWord = editText.getText().toString();
 
             if (words.get(round).second.toLowerCase().equals(translatedWord.toLowerCase().trim())) {
+                positives++;
                 hideKeyboard();
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
                 imageView.setImageResource(R.drawable.ic_done_black_24dp);
                 imageView.setColorFilter(Color.parseColor("#66CD00"));
                 checkButton.setBackgroundColor(Color.parseColor("#66CD00"));
                 checkButton.setText("Next");
-                positives++;
+                words.remove(round);
+                Collections.shuffle(words);
+                progress++;
+                progressBar.setProgress(progress);
+                round--;
             }
             else {
                 negatives++;
@@ -77,18 +89,63 @@ public class TestActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.ic_clear_black_24dp);
                 imageView.setColorFilter(getResources().getColor(R.color.colorAccent));
                 checkButton.setText("Next");
-            }
-            round++;
-            progressBar.setProgress(round);
-            if (round == words.size()) {
+                words.add(words.get(round));
+                if(badAnswers.containsKey(words.get(round).first)) {
+                    Integer n = (Integer)badAnswers.get(words.get(round).first);
+                    n++;
+                    badAnswers.put(words.get(round).first, n);
+                }
+                else {
+                    badAnswers.put(words.get(round).first, 1);
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder
-                .setMessage("Your score is: " + positives + " good answers and " +
-                        negatives + " bad answers")
+                        .setMessage("Correct answer is: \n'" + words.get(round).second.toLowerCase()+"'")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        })
+                        .show();
+            }
+            round++;
+            if (round == words.size()) {
+                String info = "";
+                Set entrySet = badAnswers.entrySet();
+                Iterator it = entrySet.iterator();
+                while(it.hasNext()){
+                    Map.Entry set = (Map.Entry)it.next();
+                    if (set.getValue() == 1) {
+                        info += "Please revise word: '" + set.getKey() + "'\n";
+                    }
+                    else if (set.getValue() == 2) {
+                        info += "You should carefully repeat word: '" + set.getKey() + "'\n";
+                    }
+                    else {
+                        info += "You had a real truble with word: '" + set.getKey() + "'\n";
+                    }
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final String finalInfo = info;
+                builder
+                .setMessage("Your score is: \n" + positives + " good answers and " +
+                        negatives + " bad answers\n" + info)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 finish();
+                            }
+                        })
+                        .setNegativeButton("Send raport to email", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                final String raport = "Your score is: \n" + positives + " good answers and " +
+                                        negatives + " bad answers\n" + finalInfo;
+                            Intent email = new Intent(Intent.ACTION_SEND);
+                            email.putExtra(Intent.EXTRA_SUBJECT, "My Easy Language raport");
+                            email.putExtra(Intent.EXTRA_TEXT, raport);
+                            email.setType("message/rfc822");
+                            startActivity(Intent.createChooser(email, "Choose an Email client :"));
                             }
                         })
                         .show();
